@@ -84,7 +84,7 @@ class _HomeContent extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(AppConstants.kDefaultPadding * 2),
                 decoration: BoxDecoration(
-                  color: AppColors.kPrimaryLight.withOpacity(0.1),
+                  color: AppColors.kPrimaryLight.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
