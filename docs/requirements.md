@@ -87,15 +87,15 @@
 ### 📋 データ管理
 
 #### 子ども情報管理
-- [ ] 子どもの基本情報（名前、学年、カラー）
+- [x] 子どもの基本情報（名前、学年、カラー、画像）
 - [ ] 複数子どもの登録（最大3人まで）
 - [ ] 子どもの削除・編集機能
 
 #### 持ち物管理
-- [ ] 持ち物の登録・編集・削除（曜日別に設定）
-- [ ] 持ち物カテゴリ（教科書、給食、体育着など）
-- [ ] 持ち物の重要度設定（必須/任意）
-- [ ] 持ち物のメモ機能
+- [x] 持ち物の登録・編集・削除（曜日別に設定）
+- [x] 持ち物カテゴリ（教科書、給食、体育着など）
+- [x] 持ち物の重要度設定（必須/任意）
+- [x] 持ち物のメモ機能
 
 #### イベント管理
 - [ ] イベントの登録（遠足、プール、参観日など）
@@ -271,4 +271,82 @@
 
 ---
 
+## 🚀 CI/CD設定
+
+### GitHub Actions ワークフロー
+
+#### テスト自動実行
+- **ファイル**: `.github/workflows/test.yml`
+- **トリガー**: PR作成・更新、main/developブランチへのプッシュ
+- **実行内容**:
+  - Flutter環境セットアップ
+  - 依存関係インストール
+  - コード分析 (flutter analyze)
+  - フォーマットチェック (dart format)
+  - 単体テスト実行 (flutter test)
+  - カバレッジ測定
+  - テスト結果をPRにコメント投稿
+
+#### PR自動サマリー
+- **ファイル**: `.github/workflows/pr-summary.yml`
+- **トリガー**: PR作成時
+- **実行内容**:
+  - 変更ファイルの分析
+  - 影響範囲の予測
+  - PR概要の自動生成・投稿
+
+### テスト実行コマンド
+
+#### ローカル実行
+```bash
+# 全テスト実行
+flutter test
+
+# 特定ディレクトリのテスト
+flutter test test/models/
+
+# カバレッジ付きテスト
+flutter test --coverage
+```
+
+#### CI/CD実行
+- GitHub Actionsで自動実行
+- PR作成時にテスト結果をコメント投稿
+- カバレッジレポートをArtifactsに保存
+
+---
+
 この要件定義はアプリの成長に応じて更新されます。
+
+## 🎯 実装履歴
+
+### 2025年6月 - モデルクラス実装
+- [x] `Child`モデルクラスの作成（`lib/models/child.dart`）
+  - 子どもの名前、学年、カラー、ID、作成・更新日時を管理
+  - `fromMap`/`toMap`メソッドでSQLite対応
+  - `create`ファクトリメソッドで新規作成
+  - `copyWith`メソッドで更新操作
+  - null safety対応
+
+- [x] `Item`モデルクラスの作成（`lib/models/item.dart`）
+  - 持ち物の名前、カテゴリ、曜日、重要度、メモ、子どもIDを管理
+  - 曜日は数値（1-7）で管理し、`dayOfWeekText`で文字列取得
+  - 重要度は数値（1: 必須, 2: 任意）で管理し、`importanceText`で文字列取得
+  - `isRequired`プロパティで必須判定
+  - `fromMap`/`toMap`メソッドでSQLite対応
+  - `create`ファクトリメソッドで新規作成
+  - `copyWith`メソッドで更新操作
+  - null safety対応
+
+- [x] 単体テストの作成
+  - `test/models/child_test.dart` - Childモデルの全機能をテスト
+  - `test/models/item_test.dart` - Itemモデルの全機能をテスト
+  - fromMap/toMap、create、copyWith、比較演算子、getterメソッドをカバー
+
+### 2025年6月27日 - Childモデル拡張
+- [x] `Child`モデルに顔画像機能を追加
+  - `photoPath`フィールドを追加（String?型でnull safety対応）
+  - `hasPhoto`プロパティで画像の有無を判定
+  - `fromMap`/`toMap`メソッドに画像パス対応を追加
+  - `create`/`copyWith`メソッドに画像パス対応を追加
+  - 単体テストを更新して画像機能をカバー

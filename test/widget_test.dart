@@ -11,20 +11,40 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:asaren_reminder/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('App should start without crashing', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that the app starts without crashing
+    expect(find.byType(MaterialApp), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Verify that the home screen is displayed
+    expect(find.text('朝連リマインダー'), findsOneWidget);
+    expect(find.text('子育て家庭を支援する持ち物リマインダー'), findsOneWidget);
+  });
+
+  testWidgets('Bottom navigation should work', (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    // Verify bottom navigation items exist
+    expect(find.text('ホーム'), findsOneWidget);
+    expect(find.text('持ち物リスト'), findsOneWidget);
+    expect(find.text('設定'), findsOneWidget);
+
+    // Tap on item list tab
+    await tester.tap(find.text('持ち物リスト'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify item list screen is displayed
+    expect(find.text('持ち物リスト'), findsOneWidget);
+    expect(find.text('ここに持ち物の一覧が表示されます'), findsOneWidget);
+
+    // Tap on settings tab
+    await tester.tap(find.text('設定'));
+    await tester.pump();
+
+    // Verify settings screen is displayed
+    expect(find.text('設定'), findsOneWidget);
+    expect(find.text('アプリの設定をここで管理できます'), findsOneWidget);
   });
 }

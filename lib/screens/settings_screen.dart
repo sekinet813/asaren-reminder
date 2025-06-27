@@ -34,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(AppConstants.kDefaultPadding * 2),
                 decoration: BoxDecoration(
-                  color: AppColors.kPrimaryLight.withOpacity(0.1),
+                  color: AppColors.kPrimaryLight.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -71,12 +71,12 @@ class SettingsScreen extends StatelessWidget {
                   vertical: AppConstants.kDefaultPadding / 2,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.kWarning.withOpacity(0.1),
+                  color: AppColors.kWarning.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(
                     AppConstants.kBorderRadius,
                   ),
                   border: Border.all(
-                    color: AppColors.kWarning.withOpacity(0.3),
+                    color: AppColors.kWarning.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Text(
