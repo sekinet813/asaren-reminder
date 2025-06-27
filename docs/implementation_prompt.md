@@ -27,5 +27,6 @@ https://github.com/sekinet813/asaren-reminder/issues/XX
 - 実装に伴う要件の追加・変更は `docs/requirements.md` に追記してください  
 - 必要な単体テスト・ウィジェットテストを `test/` 以下に追加・更新してください  
 - ファイル命名規則（snake_case）やディレクトリ構成ルールも `cursor_rules.md` に準拠してください  
-- DartDocコメントは、公開クラス・メソッドに最低限の説明を記述してください  
+- DartDocコメントは、公開クラス・メソッドに最低限の説明を記述してください
+- `flutter analyze` を実行して、警告が出ないことを確認してください
 ```
