@@ -350,3 +350,46 @@ flutter test --coverage
   - `fromMap`/`toMap`メソッドに画像パス対応を追加
   - `create`/`copyWith`メソッドに画像パス対応を追加
   - 単体テストを更新して画像機能をカバー
+
+### 2025年6月27日 - SQLiteデータベース実装
+- [x] 依存関係の追加
+  - `sqflite: ^2.3.3+1` - SQLite操作用
+  - `path_provider: ^2.1.4` - アプリ内保存場所の取得用
+  - `path: ^1.9.0` - パス操作用
+
+- [x] `Event`モデルクラスの作成（`lib/models/event.dart`）
+  - イベントのタイトル、説明、開始・終了日時、場所、種類、繰り返し設定を管理
+  - 終日イベント対応（`endDate`がnullの場合）
+  - 繰り返し設定（なし、毎年、毎月、毎週）
+  - `isOnDate`メソッドで指定日付のイベント判定
+  - `fromMap`/`toMap`メソッドでSQLite対応
+  - `create`ファクトリメソッドで新規作成
+  - `copyWith`メソッドで更新操作
+  - null safety対応
+
+- [x] `AppDatabase`クラスの作成（`lib/db/app_database.dart`）
+  - シングルトンパターンでデータベースインスタンス管理
+  - 3つのテーブル（children、items、events）の作成
+  - 外部キー制約による参照整合性の保証
+  - インデックスによる検索パフォーマンスの最適化
+  - CRUD操作の完全実装（Create、Read、Update、Delete）
+  - 日付範囲検索、曜日別検索、子ども別検索の実装
+  - データベース統計情報の取得機能
+  - エラーハンドリングとトランザクション管理
+
+- [x] 単体テストの作成
+  - `test/models/event_test.dart` - Eventモデルの全機能をテスト
+  - `test/db/app_database_test.dart` - データベース操作の全機能をテスト
+  - 各モデルのCRUD操作、検索機能、統計機能をカバー
+  - 外部キー制約とデータ整合性のテスト
+
+### 技術仕様
+- **データベース名**: `asaren_reminder.db`
+- **バージョン**: 1
+- **テーブル構成**:
+  - `children`: 子どもの基本情報
+  - `items`: 持ち物情報（childrenテーブルと外部キー制約）
+  - `events`: イベント情報（childrenテーブルと外部キー制約）
+- **インデックス**: 検索パフォーマンス向上のため適切なインデックスを設定
+- **null safety**: 全モデルでnull safety対応
+- **エラーハンドリング**: try-catch文による適切なエラー処理
