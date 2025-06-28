@@ -91,7 +91,7 @@ void main() {
           // プラグインエラーは無視（テスト環境では正常）
           expect(e.toString(), contains('MissingPluginException'));
         }
-    });
+      });
 
       test('should delete child', () async {
         final child = Child.create(
@@ -115,9 +115,9 @@ void main() {
       test('should get all children', () async {
         final child1 = Child.create(
           name: 'テスト太郎',
-        grade: '小学1年生',
-        color: '#FF0000',
-      );
+          grade: '小学1年生',
+          color: '#FF0000',
+        );
 
         final child2 = Child.create(
           name: 'テスト花子',
@@ -204,7 +204,7 @@ void main() {
           // プラグインエラーは無視（テスト環境では正常）
           expect(e.toString(), contains('MissingPluginException'));
         }
-    });
+      });
 
       test('should get items by child and day of week', () async {
         final item = Item.create(
