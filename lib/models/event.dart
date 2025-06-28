@@ -154,10 +154,10 @@ class Event {
   bool isOnDate(DateTime date) {
     final startOfDay = DateTime.utc(date.year, date.month, date.day);
     final endOfDay = startOfDay.add(const Duration(days: 1));
-  
+
     final startCondition = startDate.isBefore(endOfDay);
     final endCondition = endDate == null || endDate!.isAfter(startOfDay);
-  
+
     return startCondition && endCondition;
   }
 
