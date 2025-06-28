@@ -275,7 +275,7 @@
       "name": "asaren_reminder",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.0"
     }
   ],
   "generator": "pub",
