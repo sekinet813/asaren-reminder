@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import 'screens/home_screen.dart';
 import 'utils/constants.dart';
 import 'db/app_database.dart';
 import 'providers/child_provider.dart';
 import 'theme/app_theme.dart';
+import 'routes/app_router.dart';
 
 void main() async {
   // Flutterバインディングを初期化
@@ -37,10 +37,10 @@ class AsarenReminderApp extends StatelessWidget {
           create: (context) => ChildProvider()..initialize(),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: AppConstants.kAppName,
         theme: AppTheme.lightTheme,
-        home: const HomeScreen(),
+        routerConfig: AppRouter.router,
       ),
     );
   }

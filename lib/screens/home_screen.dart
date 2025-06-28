@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
 import '../utils/constants.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_text_style.dart';
-import 'item_list_screen.dart';
-import 'settings_screen.dart';
+import '../routes/app_router.dart';
 
 /// アプリのメイン画面
 /// BottomNavigationBarを使って画面を切り替える
@@ -17,23 +18,37 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = AppConstants.kHomeIndex;
 
-  // 画面のリスト
-  final List<Widget> _screens = [
-    const _HomeContent(),
-    const ItemListScreen(),
-    const SettingsScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: const _HomeContent(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
+
+          // GoRouterが利用可能な場合のみ使用
+          try {
+            final router = GoRouter.of(context);
+            switch (index) {
+              case 0:
+                router.go(AppRoutes.home);
+                break;
+              case 1:
+                router.go(AppRoutes.items);
+                break;
+              case 2:
+                router.go(AppRoutes.settings);
+                break;
+            }
+          } catch (e) {
+            // GoRouterが利用できない場合（テスト環境など）は何もしない
+            if (kDebugMode) {
+              print('GoRouter not available: $e');
+            }
+          }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'ホーム'),

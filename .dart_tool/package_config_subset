@@ -34,6 +34,10 @@ flutter_lints
 3.5
 file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/flutter_lints-5.0.0/
 file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/flutter_lints-5.0.0/lib/
+go_router
+3.4
+file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/go_router-14.8.1/
+file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/go_router-14.8.1/lib/
 leak_tracker
 3.2
 file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/leak_tracker-10.0.9/
@@ -50,6 +54,10 @@ lints
 3.6
 file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/lints-5.1.1/
 file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/lints-5.1.1/lib/
+logging
+3.4
+file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/logging-1.3.0/
+file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/logging-1.3.0/lib/
 matcher
 3.4
 file:///Users/takumarusekine/.pub-cache/hosted/pub.dev/matcher-0.12.17/
@@ -182,4 +190,8 @@ flutter_test
 3.7
 file:///Users/takumarusekine/development/flutter/packages/flutter_test/
 file:///Users/takumarusekine/development/flutter/packages/flutter_test/lib/
+flutter_web_plugins
+3.7
+file:///Users/takumarusekine/development/flutter/packages/flutter_web_plugins/
+file:///Users/takumarusekine/development/flutter/packages/flutter_web_plugins/lib/
 2
