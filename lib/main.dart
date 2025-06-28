@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'utils/constants.dart';
+import 'db/app_database.dart';
 
-void main() {
+void main() async {
+  // Flutterバインディングを初期化
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // データベースを初期化
+  await AppDatabase.instance.database;
+
   runApp(const MyApp());
 }
 
