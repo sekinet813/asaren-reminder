@@ -45,17 +45,6 @@ class SettingsScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppConstants.kDefaultPadding * 2),
 
-              // タイトル
-              Text(
-                '設定',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.kTextPrimary,
-                ),
-              ),
-              const SizedBox(height: AppConstants.kDefaultPadding),
-
               // 説明
               Text(
                 'アプリの設定をここで管理できます',

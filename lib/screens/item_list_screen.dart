@@ -45,17 +45,6 @@ class ItemListScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppConstants.kDefaultPadding * 2),
 
-              // タイトル
-              Text(
-                '持ち物リスト',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.kTextPrimary,
-                ),
-              ),
-              const SizedBox(height: AppConstants.kDefaultPadding),
-
               // 説明
               Text(
                 'ここに持ち物の一覧が表示されます',
