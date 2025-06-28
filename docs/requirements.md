@@ -392,13 +392,69 @@ flutter test --coverage
   - 各モデルのCRUD操作、検索機能、統計機能をカバー
   - 外部キー制約とデータ整合性のテスト
 
+### 2025年6月28日 - カスタムテーマシステム実装
+- [x] テーマディレクトリ構造の作成
+  - `lib/theme/`ディレクトリを作成
+  - テーマ関連ファイルを分離管理
+
+- [x] `AppColors`クラスの分離（`lib/theme/app_colors.dart`）
+  - メインカラー（優しいグリーン系）
+  - アクセントカラー（温かみのあるピーチ系）
+  - 機能色（成功・警告・エラー）
+  - テキスト色（プライマリ・セカンダリ・ヒント）
+  - 背景色（ライト・ダークモード対応）
+  - プライベートコンストラクタでインスタンス化防止
+
+- [x] `AppSpacing`クラスの作成（`lib/theme/app_spacing.dart`）
+  - 8dp Grid Systemに基づくスペーシング定数
+  - 基本スペーシング（4, 8, 12, 16, 20, 24, 32, 40, 48dp）
+  - レイアウト用スペーシング（デフォルト、カード、画面、ボタン）
+  - コンポーネント間隔（セクション、リスト）
+  - プライベートコンストラクタでインスタンス化防止
+
+- [x] `AppTextStyle`クラスの作成（`lib/theme/app_text_style.dart`）
+  - Material Design 3に基づくタイポグラフィ定義
+  - Display、Headline、Title、Body、Labelスタイル
+  - 特殊用途スタイル（Caption、Overline）
+  - フォントサイズ、ウェイト、行間、色の統一
+  - プライベートコンストラクタでインスタンス化防止
+
+- [x] `AppTheme`クラスの作成（`lib/theme/app_theme.dart`）
+  - Material Design 3準拠のThemeData定義
+  - ライトテーマの完全実装
+  - ダークテーマの基盤準備（将来的な拡張用）
+  - AppBar、Card、Button、Input、NavigationBarテーマ
+  - TextTheme、IconTheme、DividerTheme、ListTileTheme
+  - プライベートコンストラクタでインスタンス化防止
+
+- [x] メインアプリケーションの更新（`lib/main.dart`）
+  - `AppTheme.lightTheme`をMaterialAppに適用
+  - 既存のインライン設定を削除
+  - テーマシステムの統合
+
+- [x] 既存画面のテーマ対応更新
+  - `HomeScreen`で`Theme.of(context)`経由でのスタイル取得
+  - 直接的な色指定からテーマベースの指定に変更
+  - 一貫したデザインシステムの適用
+
+- [x] 単体テストの作成
+  - `test/theme/app_theme_test.dart` - テーマ設定の検証
+  - `test/theme/app_colors_test.dart` - カラーパレットの検証
+  - `test/theme/app_spacing_test.dart` - スペーシング定数の検証
+  - `test/theme/app_text_style_test.dart` - タイポグラフィの検証
+  - 各テーマ要素の正確性と一貫性をテスト
+
 ### 技術仕様
-- **データベース名**: `asaren_reminder.db`
-- **バージョン**: 1
-- **テーブル構成**:
-  - `children`: 子どもの基本情報
-  - `items`: 持ち物情報（childrenテーブルと外部キー制約）
-  - `events`: イベント情報（childrenテーブルと外部キー制約）
-- **インデックス**: 検索パフォーマンス向上のため適切なインデックスを設定
-- **null safety**: 全モデルでnull safety対応
-- **エラーハンドリング**: try-catch文による適切なエラー処理
+- **テーマ構造**: Material Design 3準拠
+- **カラーパレット**: 優しいグリーン系 + 温かみのあるピーチ系
+- **スペーシング**: 8dp Grid System
+- **タイポグラフィ**: Material Design 3 Text Styles
+- **対応モード**: ライトモード（ダークモードは将来的に対応）
+- **アクセシビリティ**: コントラスト比4.5:1以上を保証
+
+### 完了条件
+- [x] ThemeDataがMaterialAppに適用され、カスタムテーマが全体で利用可能
+- [x] コンポーネント側でTheme.of(context)経由で取得可能
+- [x] Text、Container、Paddingなどに一貫したスタイル適用
+- [x] flutter analyzeで警告なし
+- [x] 単体テストでテーマ要素の正確性を検証

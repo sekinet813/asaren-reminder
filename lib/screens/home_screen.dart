@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
+import '../theme/app_spacing.dart';
+import '../theme/app_text_style.dart';
 import 'item_list_screen.dart';
 import 'settings_screen.dart';
 
@@ -49,89 +51,84 @@ class _HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           AppConstants.kAppName,
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          style: AppTextStyle.kDisplayMedium.copyWith(
+            color: Colors.white,
+          ),
         ),
-        backgroundColor: AppColors.kPrimary,
-        foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [AppColors.kBackground, AppColors.kSurface],
+              colors: [colorScheme.surface, colorScheme.surface],
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(AppConstants.kDefaultPadding),
+            padding: const EdgeInsets.all(AppSpacing.kScreenPadding),
             child: Column(
               children: [
-                const SizedBox(height: AppConstants.kDefaultPadding * 2),
+                const SizedBox(height: AppSpacing.kSpacing32),
                 // メインアイコン
                 Container(
-                  padding: const EdgeInsets.all(
-                    AppConstants.kDefaultPadding * 2,
-                  ),
+                  padding: const EdgeInsets.all(AppSpacing.kSpacing32),
                   decoration: BoxDecoration(
-                    color: AppColors.kPrimaryLight.withValues(alpha: 0.1),
+                    color: colorScheme.primary.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.family_restroom,
                     size: 80,
-                    color: AppColors.kPrimary,
+                    color: colorScheme.primary,
                   ),
                 ),
-                const SizedBox(height: AppConstants.kDefaultPadding * 2),
+                const SizedBox(height: AppSpacing.kSpacing32),
 
                 // 説明
                 Text(
                   '子育て家庭を支援する持ち物リマインダー',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.kTextSecondary,
+                  style: AppTextStyle.kBodyLarge.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: AppConstants.kDefaultPadding * 2),
+                const SizedBox(height: AppSpacing.kSpacing32),
 
                 // 機能説明カード
                 Card(
                   child: Padding(
-                    padding: const EdgeInsets.all(AppConstants.kDefaultPadding),
+                    padding: const EdgeInsets.all(AppSpacing.kCardPadding),
                     child: Column(
                       children: [
                         Text(
                           '主な機能',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.kTextPrimary,
-                          ),
+                          style: AppTextStyle.kTitleLarge,
                         ),
-                        const SizedBox(height: AppConstants.kDefaultPadding),
+                        const SizedBox(height: AppSpacing.kSpacing16),
                         _buildFeatureItem(
+                          context,
                           Icons.person,
                           '子どもの管理',
                           '複数の子どもを登録・管理できます',
                         ),
-                        const SizedBox(
-                          height: AppConstants.kDefaultPadding / 2,
-                        ),
+                        const SizedBox(height: AppSpacing.kSpacing8),
                         _buildFeatureItem(
+                          context,
                           Icons.inventory,
                           '持ち物リスト',
                           '子どもごとの持ち物を管理できます',
                         ),
-                        const SizedBox(
-                          height: AppConstants.kDefaultPadding / 2,
-                        ),
+                        const SizedBox(height: AppSpacing.kSpacing8),
                         _buildFeatureItem(
+                          context,
                           Icons.event,
                           '予定管理',
                           '学校行事やイベントの予定を管理できます',
@@ -148,26 +145,38 @@ class _HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(IconData icon, String title, String description) {
+  Widget _buildFeatureItem(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String description,
+  ) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Row(
       children: [
-        Icon(icon, color: AppColors.kPrimary, size: 24),
-        const SizedBox(width: AppConstants.kDefaultPadding),
+        Icon(
+          icon,
+          color: colorScheme.primary,
+          size: 24,
+        ),
+        const SizedBox(width: AppSpacing.kSpacing16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: 16,
+                style: AppTextStyle.kBodyLarge.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.kTextPrimary,
                 ),
               ),
               Text(
                 description,
-                style: TextStyle(fontSize: 14, color: AppColors.kTextSecondary),
+                style: AppTextStyle.kBodyMedium.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
             ],
           ),

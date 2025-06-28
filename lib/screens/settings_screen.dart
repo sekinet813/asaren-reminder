@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_spacing.dart';
+import '../theme/app_text_style.dart';
 
 /// 設定画面
 /// 現在は仮実装で、テキストラベルのみ表示
@@ -8,70 +11,72 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           AppConstants.kSettingsTitle,
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          style: AppTextStyle.kDisplayMedium.copyWith(
+            color: Colors.white,
+          ),
         ),
-        backgroundColor: AppColors.kPrimary,
-        foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [AppColors.kBackground, AppColors.kSurface],
+            colors: [colorScheme.surface, colorScheme.surface],
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(AppConstants.kDefaultPadding),
+          padding: const EdgeInsets.all(AppSpacing.kScreenPadding),
           child: Column(
             children: [
-              const SizedBox(height: AppConstants.kDefaultPadding * 2),
+              const SizedBox(height: AppSpacing.kSpacing32),
               // メインアイコン
               Container(
-                padding: const EdgeInsets.all(AppConstants.kDefaultPadding * 2),
+                padding: const EdgeInsets.all(AppSpacing.kSpacing32),
                 decoration: BoxDecoration(
-                  color: AppColors.kPrimaryLight.withValues(alpha: 0.1),
+                  color: colorScheme.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.settings,
                   size: 80,
-                  color: AppColors.kPrimary,
+                  color: colorScheme.primary,
                 ),
               ),
-              const SizedBox(height: AppConstants.kDefaultPadding * 2),
+              const SizedBox(height: AppSpacing.kSpacing32),
 
               // 説明
               Text(
                 'アプリの設定をここで管理できます',
-                style: TextStyle(fontSize: 16, color: AppColors.kTextSecondary),
+                style: AppTextStyle.kBodyLarge.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppConstants.kDefaultPadding * 2),
+              const SizedBox(height: AppSpacing.kSpacing32),
 
               // 実装予定バッジ
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppConstants.kDefaultPadding,
-                  vertical: AppConstants.kDefaultPadding / 2,
+                  horizontal: AppSpacing.kSpacing16,
+                  vertical: AppSpacing.kSpacing8,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.kWarning.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(
-                    AppConstants.kBorderRadius,
-                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(
                     color: AppColors.kWarning.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Text(
                   '（実装予定）',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: AppTextStyle.kBodyMedium.copyWith(
                     color: AppColors.kWarning,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w500,
