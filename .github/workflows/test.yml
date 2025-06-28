@@ -124,6 +124,14 @@ jobs:
           script: |
             const fs = require('fs');
             
+            // リポジトリ情報を明示的に取得
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueNumber = context.issue.number;
+            
+            console.log(`Repository: ${owner}/${repo}`);
+            console.log(`Issue Number: ${issueNumber}`);
+            
             // テンプレートを読み込み
             let template = fs.readFileSync('comment-template.md', 'utf8');
             
@@ -179,7 +187,7 @@ jobs:
                 const coverage = totalLines > 0 ? ((coveredLines / totalLines) * 100).toFixed(2) : 0;
                 coverageInfo = `**カバレッジ**: ${coverage}% (${coveredLines}/${totalLines} 行)`;
                 coverageSection = `### カバレッジレポート
-                カバレッジレポートは [Artifacts](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) からダウンロードできます。`;
+                カバレッジレポートは [Artifacts](https://github.com/${owner}/${repo}/actions/runs/${context.runId}) からダウンロードできます。`;
               } catch (error) {
                 coverageInfo = '**カバレッジ**: 計算できませんでした';
               }
@@ -187,7 +195,7 @@ jobs:
             
             // 変数を置換
             const comment = template
-              .replace(/\$STATUS_ICON/g, testSuccess ? 'OK' : 'WARNING')
+              .replace(/\$STATUS_ICON/g, testSuccess ? '✅' : '⚠️')
               .replace(/\$STATUS_TEXT/g, testSuccess ? '成功' : '失敗')
               .replace(/\$TEST_SUMMARY/g, testSummary)
               .replace(/\$COVERAGE_INFO/g, coverageInfo)
@@ -197,7 +205,17 @@ jobs:
               .replace(/\$TEST_OUTPUT/g, testOutput)
               .replace(/\$FAILURE_MESSAGE/g, testSuccess ? '' : '### 修正が必要\nテストが失敗しています。上記のエラーを確認して修正してください。');
             
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              body: comment
-            }); 
+            try {
+              await github.rest.issues.createComment({
+                owner: owner,
+                repo: repo,
+                issue_number: issueNumber,
+                body: comment
+              });
+              console.log('Comment posted successfully');
+            } catch (error) {
+              console.error('Error posting comment:', error);
+              console.error('Owner:', owner);
+              console.error('Repo:', repo);
+              console.error('Issue Number:', issueNumber);
+            }
