@@ -1,0 +1,69 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+# 権限を明示的に設定
+permissions:
+  contents: write      # リポジトリへの書き込み権限（コミット用）
+  pull-requests: write # PRへのコメント権限
+  actions: read        # ワークフロー情報の読み取り権限
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      # リポジトリをチェックアウト
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Flutterをセットアップ
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # lcovをインストール
+      - name: Install lcov
+        run: sudo apt-get update && sudo apt-get install -y lcov
+
+      # 依存パッケージ取得
+      - name: Install dependencies
+        run: flutter pub get
+
+      # テスト＆カバレッジレポート生成
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      # lcovをHTMLに変換
+      - name: Generate coverage report
+        run: |
+          if [ -f coverage/lcov.info ]; then
+            genhtml coverage/lcov.info -o coverage/html
+          else
+            echo "No coverage data found"
+            mkdir -p coverage/html
+            echo "<html><body><h1>No coverage data available</h1></body></html>" > coverage/html/index.html
+          fi
+
+      # docs/coverage に上書き
+      - name: Update coverage docs
+        run: |
+          rm -rf docs/coverage
+          mv coverage/html docs/coverage
+
+      # 変更があれば自動コミット＆Push
+      - name: Commit coverage report
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email actions@github.com
+          git add docs/coverage
+          git diff --staged --quiet || git commit -m "Update coverage report [skip ci]"
+          git push

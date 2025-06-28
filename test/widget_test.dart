@@ -14,7 +14,7 @@ import 'package:asaren_reminder/providers/child_provider.dart';
 void main() {
   testWidgets('App should start without crashing', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const AsarenReminderApp());
 
     // Verify that the app starts without crashing
     expect(find.byType(MaterialApp), findsOneWidget);
@@ -25,7 +25,7 @@ void main() {
   });
 
   testWidgets('Bottom navigation should work', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const AsarenReminderApp());
 
     // Verify bottom navigation items exist
     expect(find.byType(BottomNavigationBar), findsOneWidget);
@@ -66,7 +66,7 @@ void main() {
   });
 
   testWidgets('Provider integration test', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const AsarenReminderApp());
 
     // Providerが正しく設定されていることを確認
     expect(find.byType(MultiProvider), findsOneWidget);

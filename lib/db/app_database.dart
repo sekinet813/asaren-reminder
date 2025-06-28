@@ -306,18 +306,15 @@ class AppDatabase {
   /// データベースの統計情報を取得
   Future<Map<String, int>> getDatabaseStats() async {
     final db = await database;
-    final childrenCount =
-        Sqflite.firstIntValue(
+    final childrenCount = Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM children'),
         ) ??
         0;
-    final itemsCount =
-        Sqflite.firstIntValue(
+    final itemsCount = Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM items'),
         ) ??
         0;
-    final eventsCount =
-        Sqflite.firstIntValue(
+    final eventsCount = Sqflite.firstIntValue(
           await db.rawQuery('SELECT COUNT(*) FROM events'),
         ) ??
         0;

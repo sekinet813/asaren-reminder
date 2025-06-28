@@ -152,11 +152,13 @@ class Event {
 
   /// イベントが指定された日付に含まれるかどうかを判定
   bool isOnDate(DateTime date) {
-    final startOfDay = DateTime(date.year, date.month, date.day);
+    final startOfDay = DateTime.utc(date.year, date.month, date.day);
     final endOfDay = startOfDay.add(const Duration(days: 1));
 
-    return startDate.isBefore(endOfDay) &&
-        (endDate == null || endDate!.isAfter(startOfDay));
+    final startCondition = startDate.isBefore(endOfDay);
+    final endCondition = endDate == null || endDate!.isAfter(startOfDay);
+
+    return startCondition && endCondition;
   }
 
   @override

@@ -14,6 +14,8 @@
 ## Cursor用プロンプト（実装者向け）
 
 ```markdown
+## 依頼内容
+
 以下の Issue を実装してください：
 
 https://github.com/sekinet813/asaren-reminder/issues/XX

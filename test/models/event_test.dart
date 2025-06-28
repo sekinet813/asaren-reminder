@@ -291,5 +291,172 @@ void main() {
       expect(event1, equals(event2));
       expect(event1, isNot(equals(event3)));
     });
+
+    test('should handle invalid repeat type values', () {
+      // 不正な繰り返しタイプ値のテスト
+      final invalidRepeatType = 4; // 0-3の範囲外
+
+      final event = Event.create(
+        title: 'テストイベント',
+        startDate: DateTime.parse('2024-06-15T09:00:00.000Z'),
+        eventType: 'テスト',
+        repeatType: invalidRepeatType,
+        childId: 1,
+      );
+
+      expect(event.repeatType, invalidRepeatType);
+      // repeatTypeTextは配列の範囲外アクセスでエラーになる可能性がある
+      expect(() => event.repeatTypeText, throwsA(isA<RangeError>()));
+    });
+
+    test('should handle all repeat type values', () {
+      final repeatTypes = [0, 1, 2, 3];
+      final expectedTexts = ['なし', '毎年', '毎月', '毎週'];
+
+      for (int i = 0; i < repeatTypes.length; i++) {
+        final event = Event.create(
+          title: 'テストイベント',
+          startDate: DateTime.parse('2024-06-15T09:00:00.000Z'),
+          eventType: 'テスト',
+          repeatType: repeatTypes[i],
+          childId: 1,
+        );
+
+        expect(event.repeatTypeText, expectedTexts[i]);
+      }
+    });
+
+    test('should handle isOnDate method correctly', () {
+      final event = Event.create(
+        title: 'テストイベント',
+        startDate: DateTime.parse('2024-06-15T10:00:00.000Z'),
+        endDate: DateTime.parse('2024-06-15T12:00:00.000Z'),
+        eventType: 'テスト',
+        repeatType: 0,
+        childId: 1,
+      );
+
+      final eventDate = DateTime(2024, 6, 15);
+      final differentDate = DateTime(2024, 6, 16);
+
+      expect(event.isOnDate(eventDate), isTrue);
+      expect(event.isOnDate(differentDate), isFalse);
+    });
+
+    test('should handle isOnDate with all day event', () {
+      final allDayEvent = Event.create(
+        title: 'テストイベント',
+        startDate: DateTime.parse('2024-06-15T00:00:00.000Z'),
+        endDate: null, // 終日イベント
+        eventType: 'テスト',
+        repeatType: 0,
+        childId: 1,
+      );
+
+      final eventDate = DateTime(2024, 6, 15);
+      final differentDate = DateTime(2024, 6, 16);
+
+      // 終日イベントは開始日に含まれる
+      expect(allDayEvent.isOnDate(eventDate), isTrue);
+      // 終日イベントは開始日以降の全ての日付に含まれる（endDate == nullのため）
+      expect(allDayEvent.isOnDate(differentDate), isTrue);
+    });
+
+    test('should handle isOnDate with multi-day event', () {
+      final multiDayEvent = Event.create(
+        title: 'テストイベント',
+        startDate: DateTime.parse('2024-06-15T00:00:00.000Z'),
+        endDate: DateTime.parse('2024-06-17T23:59:59.000Z'), // 3日間
+        eventType: 'テスト',
+        repeatType: 0,
+        childId: 1,
+      );
+
+      final startDate = DateTime(2024, 6, 15);
+      final middleDate = DateTime(2024, 6, 16);
+      final endDate = DateTime(2024, 6, 17);
+      final beforeDate = DateTime(2024, 6, 14);
+      final afterDate = DateTime(2024, 6, 18);
+
+      // 期間内の日付は全て含まれる
+      expect(multiDayEvent.isOnDate(startDate), isTrue);
+      expect(multiDayEvent.isOnDate(middleDate), isTrue);
+      expect(multiDayEvent.isOnDate(endDate), isTrue);
+      // 期間外の日付は含まれない
+      expect(multiDayEvent.isOnDate(beforeDate), isFalse);
+      expect(multiDayEvent.isOnDate(afterDate), isFalse);
+    });
+
+    test('should handle empty string values', () {
+      final mapWithEmptyStrings = {
+        'id': 1,
+        'title': '', // 空文字列
+        'description': '', // 空文字列
+        'start_date': '2024-06-15T09:00:00.000Z',
+        'end_date': null,
+        'location': '   ', // 空白文字のみ
+        'event_type': '',
+        'repeat_type': 0,
+        'child_id': 1,
+        'created_at': '2024-01-01T00:00:00.000Z',
+        'updated_at': '2024-01-01T00:00:00.000Z',
+      };
+
+      final event = Event.fromMap(mapWithEmptyStrings);
+      expect(event.title, '');
+      expect(event.description, '');
+      expect(event.location, '   ');
+      expect(event.eventType, '');
+    });
+
+    test('should handle copyWith with all null values', () {
+      final original = Event.create(
+        title: 'テストイベント',
+        description: 'テスト説明',
+        startDate: DateTime.parse('2024-06-15T09:00:00.000Z'),
+        endDate: DateTime.parse('2024-06-15T12:00:00.000Z'),
+        location: 'テスト場所',
+        eventType: 'テスト',
+        repeatType: 0,
+        childId: 1,
+      );
+
+      final copied = original.copyWith(
+        title: null,
+        description: null,
+        startDate: null,
+        endDate: null,
+        location: null,
+        eventType: null,
+        repeatType: null,
+        childId: null,
+      );
+
+      expect(copied.title, original.title);
+      expect(copied.description, original.description);
+      expect(copied.startDate, original.startDate);
+      expect(copied.endDate, original.endDate);
+      expect(copied.location, original.location);
+      expect(copied.eventType, original.eventType);
+      expect(copied.repeatType, original.repeatType);
+      expect(copied.childId, original.childId);
+      expect(copied.updatedAt.isAfter(original.updatedAt), isTrue);
+    });
+
+    test('should handle toString method correctly', () {
+      final event = Event.create(
+        title: 'テストイベント',
+        description: 'テスト説明',
+        startDate: DateTime.parse('2024-06-15T09:00:00.000Z'),
+        eventType: 'テスト',
+        repeatType: 0,
+        childId: 1,
+      );
+
+      final stringRepresentation = event.toString();
+      expect(stringRepresentation, contains('テストイベント'));
+      expect(stringRepresentation, contains('テスト'));
+      expect(stringRepresentation, contains('1'));
+    });
   });
 }
