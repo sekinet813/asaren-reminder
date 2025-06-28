@@ -358,7 +358,7 @@ void main() {
 
       // 終日イベントは開始日に含まれる
       expect(allDayEvent.isOnDate(eventDate), isTrue);
-      // 実際の実装では、終日イベントは翌日も含まれる可能性がある
+      // 終日イベントは開始日以降の全ての日付に含まれる（endDate == nullのため）
       expect(allDayEvent.isOnDate(differentDate), isTrue);
     });
 
@@ -378,14 +378,20 @@ void main() {
       final beforeDate = DateTime(2024, 6, 14);
       final afterDate = DateTime(2024, 6, 18);
 
+      // デバッグ用：実際の値を出力
+      print('Multi-day event:');
+      print('  startDate: ${multiDayEvent.startDate}');
+      print('  endDate: ${multiDayEvent.endDate}');
+      print('  afterDate: $afterDate');
+      print('  isOnDate(afterDate): ${multiDayEvent.isOnDate(afterDate)}');
+
       // 期間内の日付は全て含まれる
       expect(multiDayEvent.isOnDate(startDate), isTrue);
       expect(multiDayEvent.isOnDate(middleDate), isTrue);
       expect(multiDayEvent.isOnDate(endDate), isTrue);
       // 期間外の日付は含まれない
       expect(multiDayEvent.isOnDate(beforeDate), isFalse);
-      // 実際の実装では、終了日の翌日も含まれる可能性がある
-      expect(multiDayEvent.isOnDate(afterDate), isTrue);
+      expect(multiDayEvent.isOnDate(afterDate), isFalse);
     });
 
     test('should handle empty string values', () {
