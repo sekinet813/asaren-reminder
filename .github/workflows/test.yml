@@ -1,10 +1,10 @@
 name: Flutter Tests
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+on: 
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
 
 # 権限を明示的に設定
 permissions:
@@ -14,6 +14,25 @@ permissions:
 
 jobs:
   test:
+    runs-on: ubuntu-latest
+    needs: [test-coverage]  # test_coverage.ymlの完了を待つ
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Run tests
+      run: flutter test
+
+  test-coverage:
     runs-on: ubuntu-latest
     
     steps:
@@ -28,9 +47,6 @@ jobs:
           
       - name: Install lcov
         run: sudo apt-get update && sudo apt-get install -y lcov
-        
-      - name: Install dependencies
-        run: flutter pub get
         
       - name: Analyze code
         run: flutter analyze

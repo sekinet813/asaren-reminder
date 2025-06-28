@@ -22,11 +22,11 @@ void main() async {
     }
   }
 
-  runApp(const MyApp());
+  runApp(const AsarenReminderApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AsarenReminderApp extends StatelessWidget {
+  const AsarenReminderApp({super.key});
 
   @override
   Widget build(BuildContext context) {
