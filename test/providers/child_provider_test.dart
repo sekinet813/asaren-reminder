@@ -13,6 +13,8 @@ void main() {
 
     setUp(() {
       provider = ChildProvider();
+      // テスト環境ではデータベース操作を強制的にスキップ
+      provider.setForceSkipDatabase(true);
     });
 
     tearDown(() {
@@ -28,7 +30,7 @@ void main() {
       expect(provider.hasSelectedChild, isFalse);
     });
 
-    test('should add child successfully (Web mode)', () async {
+    test('should add child successfully', () async {
       final child = Child.create(
         name: 'テスト太郎',
         grade: '小学1年生',
@@ -38,9 +40,10 @@ void main() {
 
       await provider.addChild(child);
 
-      // Webモードではデータベース操作が失敗するため、エラーが設定される
-      expect(provider.error, isNotNull);
-      expect(provider.error!.contains('MissingPluginException'), isTrue);
+      // テスト環境ではメモリ上で管理されるため、成功する
+      expect(provider.children, hasLength(1));
+      expect(provider.children.first.name, equals('テスト太郎'));
+      expect(provider.error, isNull);
     });
 
     test('should select child successfully', () {
@@ -117,7 +120,7 @@ void main() {
       expect(provider.hasSelectedChild, isFalse);
     });
 
-    test('should update child successfully (Web mode)', () async {
+    test('should update child successfully', () async {
       final child = Child.create(
         name: 'テスト太郎',
         grade: '小学1年生',
@@ -133,12 +136,13 @@ void main() {
 
       await provider.updateChild(updatedChild);
 
-      // Webモードではデータベース操作が失敗するため、エラーが設定される
-      expect(provider.error, isNotNull);
-      expect(provider.error!.contains('MissingPluginException'), isTrue);
+      // テスト環境ではメモリ上で管理されるため、成功する
+      expect(provider.children.first.name, equals('更新太郎'));
+      expect(provider.selectedChild?.name, equals('更新太郎'));
+      expect(provider.error, isNull);
     });
 
-    test('should delete child successfully (Web mode)', () async {
+    test('should delete child successfully', () async {
       final child1 = Child.create(
         name: 'テスト太郎',
         grade: '小学1年生',
@@ -159,9 +163,11 @@ void main() {
 
       await provider.deleteChild(1);
 
-      // Webモードではデータベース操作が失敗するため、エラーが設定される
-      expect(provider.error, isNotNull);
-      expect(provider.error!.contains('MissingPluginException'), isTrue);
+      // テスト環境ではメモリ上で管理されるため、成功する
+      expect(provider.children, hasLength(1));
+      expect(provider.children.first.id, equals(2));
+      expect(provider.selectedChild?.id, equals(2)); // 自動的に次の子どもが選択される
+      expect(provider.error, isNull);
     });
 
     test('should clear error successfully', () {

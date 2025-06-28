@@ -90,6 +90,63 @@ flutter build ios
 
 ---
 
+## 🔧 開発者向け情報
+
+### Pre-commitフック
+
+このプロジェクトにはpre-commitフックが設定されており、コミット前に自動的に以下のチェックが実行されます：
+
+- `flutter analyze` - コードの静的解析
+- `dart format --set-exit-if-changed .` - コードフォーマットの確認
+
+#### Pre-commitフックの手動実行
+
+```bash
+# コミット前のチェックを手動で実行
+make pre-commit
+
+# または個別に実行
+make format    # フォーマットチェックのみ
+make analyze   # 静的解析のみ
+```
+
+#### フォーマットエラーの修正
+
+フォーマットエラーが発生した場合：
+
+```bash
+# コードを自動フォーマット
+dart format .
+
+# または
+make format
+```
+
+### Makefileコマンド
+
+プロジェクトには便利なMakefileコマンドが用意されています：
+
+```bash
+make deps      # 依存関係のインストール
+make test      # テストの実行
+make clean     # ビルドアーティファクトの削除
+make build     # 全プラットフォーム向けビルド
+```
+
+### テストカバレッジ
+
+テストカバレッジを確認するには：
+
+```bash
+# テストカバレッジを実行
+flutter test --coverage
+
+# カバレッジレポートを生成（genhtmlが必要）
+genhtml coverage/lcov.info -o coverage/html
+```
+
+---
+
 ## 📋 機能一覧
 
 ### 実装予定機能
@@ -128,5 +185,4 @@ asaren-reminder/
 ├── android/ # Android固有の設定
 ├── ios/ # iOS固有の設定
 ├── web/ # Web固有の設定
-
 ```

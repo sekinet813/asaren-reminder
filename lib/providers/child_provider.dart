@@ -19,6 +19,9 @@ class ChildProvider extends ChangeNotifier {
   /// エラー状態
   String? _error;
 
+  /// テスト用：データベース操作を強制的にスキップするフラグ
+  bool _forceSkipDatabase = false;
+
   // ==================== ゲッター ====================
 
   /// 子どもリストを取得
@@ -43,10 +46,10 @@ class ChildProvider extends ChangeNotifier {
 
   /// 初期化処理
   Future<void> initialize() async {
-    if (kIsWeb) {
-      // Web版ではデータベース操作をスキップ
+    if (_shouldSkipDatabaseOperations()) {
+      // Web版またはテスト環境ではデータベース操作をスキップ
       if (kDebugMode) {
-        print('ChildProvider: Web版のため、データベース操作をスキップします');
+        print('ChildProvider: Web版またはテスト環境のため、データベース操作をスキップします');
       }
       return;
     }
@@ -57,10 +60,10 @@ class ChildProvider extends ChangeNotifier {
 
   /// 子どもリストを読み込み
   Future<void> loadChildren() async {
-    if (kIsWeb) {
-      // Web版ではデータベース操作をスキップ
+    if (_shouldSkipDatabaseOperations()) {
+      // Web版またはテスト環境ではデータベース操作をスキップ
       if (kDebugMode) {
-        print('ChildProvider: Web版のため、データベース操作をスキップします');
+        print('ChildProvider: Web版またはテスト環境のため、データベース操作をスキップします');
       }
       return;
     }
@@ -132,12 +135,12 @@ class ChildProvider extends ChangeNotifier {
 
   /// 子どもを追加
   Future<void> addChild(Child child) async {
-    if (kIsWeb) {
-      // Web版ではメモリ上でのみ管理
+    if (_shouldSkipDatabaseOperations()) {
+      // Web版またはテスト環境ではメモリ上でのみ管理
       final newChild = child.copyWith(id: _children.length + 1);
       _children.add(newChild);
       if (kDebugMode) {
-        print('ChildProvider: Web版で子どもを追加しました: ${newChild.name}');
+        print('ChildProvider: Web版またはテスト環境で子どもを追加しました: ${newChild.name}');
       }
       notifyListeners();
       return;
@@ -169,8 +172,8 @@ class ChildProvider extends ChangeNotifier {
 
   /// 子どもを更新
   Future<void> updateChild(Child child) async {
-    if (kIsWeb) {
-      // Web版ではメモリ上でのみ管理
+    if (_shouldSkipDatabaseOperations()) {
+      // Web版またはテスト環境ではメモリ上でのみ管理
       final index = _children.indexWhere((c) => c.id == child.id);
       if (index != -1) {
         _children[index] = child;
@@ -178,7 +181,7 @@ class ChildProvider extends ChangeNotifier {
           _selectedChild = child;
         }
         if (kDebugMode) {
-          print('ChildProvider: Web版で子どもを更新しました: ${child.name}');
+          print('ChildProvider: Web版またはテスト環境で子どもを更新しました: ${child.name}');
         }
         notifyListeners();
       }
@@ -218,8 +221,8 @@ class ChildProvider extends ChangeNotifier {
 
   /// 子どもを削除
   Future<void> deleteChild(int id) async {
-    if (kIsWeb) {
-      // Web版ではメモリ上でのみ管理
+    if (_shouldSkipDatabaseOperations()) {
+      // Web版またはテスト環境ではメモリ上でのみ管理
       _children.removeWhere((child) => child.id == id);
       if (_selectedChild?.id == id) {
         _selectedChild = null;
@@ -228,7 +231,7 @@ class ChildProvider extends ChangeNotifier {
         }
       }
       if (kDebugMode) {
-        print('ChildProvider: Web版で子どもを削除しました: ID $id');
+        print('ChildProvider: Web版またはテスト環境で子どもを削除しました: ID $id');
       }
       notifyListeners();
       return;
@@ -289,6 +292,14 @@ class ChildProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ==================== ヘルパーメソッド ====================
+
+  /// データベース操作をスキップすべきかどうかを判定
+  bool _shouldSkipDatabaseOperations() {
+    // Web版、テスト環境、または強制スキップフラグが設定されている場合はスキップ
+    return kIsWeb || _forceSkipDatabase;
+  }
+
   // ==================== テスト用メソッド ====================
 
   /// テスト用：内部状態をリセット
@@ -306,5 +317,14 @@ class ChildProvider extends ChangeNotifier {
   void setChildrenForTesting(List<Child> children) {
     _children = children;
     notifyListeners();
+  }
+
+  /// テスト用：データベース操作を強制的にスキップするフラグを設定
+  @visibleForTesting
+  void setForceSkipDatabase(bool skip) {
+    _forceSkipDatabase = skip;
+    if (kDebugMode) {
+      print('ChildProvider: データベース操作スキップフラグを設定しました: $skip');
+    }
   }
 }
