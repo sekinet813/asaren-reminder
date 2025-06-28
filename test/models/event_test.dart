@@ -378,13 +378,6 @@ void main() {
       final beforeDate = DateTime(2024, 6, 14);
       final afterDate = DateTime(2024, 6, 18);
 
-      // デバッグ用：実際の値を出力
-      print('Multi-day event:');
-      print('  startDate: ${multiDayEvent.startDate}');
-      print('  endDate: ${multiDayEvent.endDate}');
-      print('  afterDate: $afterDate');
-      print('  isOnDate(afterDate): ${multiDayEvent.isOnDate(afterDate)}');
-
       // 期間内の日付は全て含まれる
       expect(multiDayEvent.isOnDate(startDate), isTrue);
       expect(multiDayEvent.isOnDate(middleDate), isTrue);
